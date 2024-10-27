@@ -1,0 +1,26 @@
+using Octokit;
+
+public class GitHubTest
+{
+    public async Task TestRepository()
+    {
+        var client = new GitHubClient(new ProductHeaderValue("MyApplication"));
+        // Replace with your GitHub token
+        client.Credentials = new Credentials("your_github_token");
+
+        // Get a specific repository
+        var repository = await client.Repository.Get("owner", "repository-name");
+
+        // Assert some properties of the repository
+        Assert.Equal("owner", repository.Owner.Login);
+        Assert.Equal("repository-name", repository.Name);
+
+        // List issues in the repository
+        var issues = await client.Issue.GetAllForRepository("owner", "repository-name");
+        Assert.NotNull(issues);
+
+        // Create an issue (be careful with this in automated tests)
+        // var newIssue = new NewIssue("Test Issue") { Body = "This is a test issue." };
+        // var createdIssue = await client.Issue.Create("owner", "repository-name", newIssue);
+    }
+}
